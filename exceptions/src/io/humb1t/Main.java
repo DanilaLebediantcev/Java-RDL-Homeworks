@@ -13,7 +13,8 @@ public class Main {
             new LifeCycleAction().execute();
         } catch (LifeCycleActionExecutionException | AccessDeniedException e) {
             System.err.println(e.getLocalizedMessage());
-        } catch (Exception e) {
+        }
+       catch (Exception e) {
             throw new RuntimeException(e);
         }
         try (FileInputStream fileInputStream = new FileInputStream(args[0])) {
@@ -26,8 +27,8 @@ public class Main {
     }
 
     public static class LifeCycleAction {
-        public void execute() throws LifeCycleActionExecutionException, AccessDeniedException {
-            throw new LifeCycleActionExecutionException();
+        public void execute() throws LifeCycleActionExecutionException, AccessDeniedException, MyException {
+            throw new MyException();
         }
     }
 
@@ -55,5 +56,15 @@ public class Main {
 
     private String returnValueOrThrowException() throws AccessDeniedException {
         return "OK";
+    }
+
+
+    //Task 1
+    //Create your own exception and add it to signature of `io.humb1t.Main.LifeCycleAction.execute
+    public static class MyException extends Exception{
+        @Override
+        public String getMessage() {
+            return "This is not-standard exception.This is my exception";
+        }
     }
 }

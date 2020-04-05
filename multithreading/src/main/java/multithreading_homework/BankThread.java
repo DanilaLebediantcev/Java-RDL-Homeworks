@@ -1,28 +1,33 @@
 package multithreading_homework;
 
-import java.util.Random;
+public class BankThread implements Runnable {
+    private String name;
+    BankUser user;
+    Bank bank;
 
-public class BankThread extends Thread {
-    private int amount;
+    public BankThread(String name) {
+        this.name = name;
+    }
 
-    public BankThread(String name, int amount) {
-        super(name);
-        this.amount = amount;
+    public String getName() {
+        return name;
+    }
+
+    public void setUser(BankUser user) {
+        this.user = user;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 
     @Override
-    public synchronized void run() {
+    public void run() {
         System.out.println("Thread " + getName() + " has been started");
-        while (Bank.hasEnoughMoney(0)) {
-            try {
-                Thread.sleep(new Random().nextInt(10) * 20 + 100);
-                System.out.print(getName() + " - user wants to take the " + amount + " money. Bank has the " + Bank.moneyAmount + " money amount. ");
-                Bank.transferMoney(amount);
-                System.out.println("All users take " + BankUser.allTakesMoney);
-            } catch (TransferException | InterruptedException e) {
-                System.out.println(getName() + ":" + e.getMessage());
-                break;
+            while (!Thread.currentThread().isInterrupted()) {
+                if (bank.hasEnoughMoney(0))
+                    user.getSomeMoney(bank);
             }
-        }
     }
 }
+

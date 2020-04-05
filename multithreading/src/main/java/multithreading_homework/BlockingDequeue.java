@@ -46,15 +46,15 @@ class Consumer implements Runnable {
 
     @Override
     public void run() {
-        try {
-            System.out.println("Consumer want take some element from the BD. ");
-            for (int i = 0; i < 50; i++) {
+        while (true) {
+            try {
+                System.out.println("Consumer want take some element from the BD. ");
                 System.out.println("[Consumer] Consumer wants to take the " + blockingDeque.takeFirst() + ". BD size: " + blockingDeque.size());
                 Thread.sleep(2000);
-            }
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

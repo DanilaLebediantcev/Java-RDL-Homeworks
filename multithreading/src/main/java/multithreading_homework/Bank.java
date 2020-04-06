@@ -12,7 +12,7 @@ public class Bank {
         return moneyAmount  - amount >= 0;
     }
 
-    public void transferMoney(int amount) throws TransferException {
+    public synchronized void transferMoney(int amount) throws TransferException {
             if (hasEnoughMoney(amount)) {
                 moneyAmount -= amount;
                 BankUser.allTakesMoney += amount;

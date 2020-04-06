@@ -1,38 +1,27 @@
 package multithreading_homework;
 
-import java.util.Objects;
 import java.util.Random;
 
-public class BankUser{
+public class BankUser implements Runnable{
+    private Bank bank;
     private int amount;
 
     static int allTakesMoney = 0;
 
     private String name;
 
-    public BankUser(String name,int amount) {
+    public BankUser(String name,int amount, Bank bank) {
         this.name = name;
         this.amount = amount;
+        this.bank = bank;
     }
 
     public String getName() {
         return name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BankUser bankUser = (BankUser) o;
-        return Objects.equals(name, bankUser.name);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    synchronized void getSomeMoney(Bank bank){
+    void getSomeMoney(Bank bank){
             try {
                 System.out.println(getName() + " - user wants to take the " + amount + " money. Bank has the " + bank.moneyAmount + " money amount. ");
                 bank.transferMoney(amount);
@@ -43,4 +32,13 @@ public class BankUser{
                 Thread.currentThread().interrupt();
             }
         }
+
+    @Override
+    public void run() {
+        System.out.println("Thread " + getName() + " has been started");
+        while (!Thread.currentThread().isInterrupted()) {
+            if (bank.hasEnoughMoney(0))
+                getSomeMoney(bank);
+        }
+    }
 }

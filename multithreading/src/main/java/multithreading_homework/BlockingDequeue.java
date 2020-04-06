@@ -11,7 +11,6 @@ public class BlockingDequeue {
         new Thread(new Consumer(blockingDeque)).start();
         new Thread(new Producer(blockingDeque)).start();
     }
-
 }
 
 class Producer implements Runnable {
@@ -33,7 +32,6 @@ class Producer implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 }
 
@@ -46,12 +44,11 @@ class Consumer implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 System.out.println("Consumer want take some element from the BD. ");
                 System.out.println("[Consumer] Consumer wants to take the " + blockingDeque.takeFirst() + ". BD size: " + blockingDeque.size());
                 Thread.sleep(2000);
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
